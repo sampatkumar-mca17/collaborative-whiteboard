@@ -1,0 +1,34 @@
+.diagram-container{
+  .toolbar{
+    display:block;
+    height:72px;
+    & .spacer {
+      flex: 1 1 auto;
+    }
+    & .export-action{
+      display:flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  & .body{
+    display:flex;
+    // grid-template-columns: repeat(auto-fit, minmax(25%,75%));
+
+    .sb-mobile-palette {
+      width: 20%;
+      &.sb-mobile-palette__hidden{
+        display:none;
+      }
+    }
+    .diagram-viewport{
+      width:80%;
+      &.diagram-viewport__fullwidth{
+        width:100%;
+      }
+      & #diagram{
+        display:block;
+      }
+    }
+  }
+}

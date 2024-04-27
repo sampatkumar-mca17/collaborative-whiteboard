@@ -1,0 +1,46 @@
+<div class="diagram-container">
+  <div class="toolbar">
+    <mat-toolbar>
+      <fa-icon [style.cursor]="'pointer'" [icon]="showShapes ? faChevronCircleRight: faChevronCircleLeft" (click)="showShapes = !showShapes"></fa-icon>
+      <span [style.paddingLeft]="'1rem'">{{whiteBoardConstants.WHITEBOARD_HEADING}}</span>
+      <span class="spacer"></span>
+      <div class="export-action" (click)="exportDiagram()">
+        <button mat-button>
+          <fa-icon [icon]="faDownload"></fa-icon>
+          {{ whiteBoardConstants.EXPORT_ACTION_TEXT }}
+        </button>
+      </div>
+
+    </mat-toolbar>
+  </div>
+  <div class="body">
+    <div id="palette-space" class="sb-mobile-palette" [ngClass]="{'sb-mobile-palette__hidden':!showShapes}">
+      <ejs-symbolpalette
+        #symbolpalette
+        id="symbolpalette"
+        (paletteSelectionChange)="paletteSelectionChang($event)"
+        [symbolPreview]="true"
+        [expandMode]='expandMode'
+        [palettes]='palettes'
+        height="700px"
+        [symbolHeight]=60
+        [symbolWidth]=60
+        [symbolMargin]='symbolMargin'
+        [getSymbolInfo]='getSymbolInfo'
+        [getNodeDefaults]='getSymbolDefaults'>
+      </ejs-symbolpalette>
+    </div>
+    <div class="diagram-viewport" [ngClass]="{'diagram-viewport__fullwidth':!showShapes}">
+      <ejs-diagram
+      #diagram id="diagram"
+      width="100%"
+      [getNodeDefaults]="getNodeDefaults"
+      (created)='created($event)'
+      (selectionChange)="onSelectionChange($event)"
+      >
+      </ejs-diagram>
+    </div>
+  </div>
+
+
+</div>
