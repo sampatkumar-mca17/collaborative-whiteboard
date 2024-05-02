@@ -1,5 +1,5 @@
 import { FontAwesomeModule, FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faDownload, faChevronCircleRight, faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons'
+import { faDownload, faRightFromBracket, faChevronCircleRight, faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons'
 import { ExportOptions } from './../models/whiteboard.model';
 import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common'
@@ -9,13 +9,14 @@ import { ExpandMode } from '@syncfusion/ej2-navigations';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
 import { MatDialog, MatDialogModule, MatDialogConfig } from '@angular/material/dialog';
 import { ExportDiagramDialogComponent } from './export-diagram-dialog/export-diagram-dialog.component';
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import * as whiteboardConstants from './white-board.constants'
-
-
+import { SharedService } from '../services/shared.service';
+import { Router } from '@angular/router';
 
 Diagram.Inject(PrintAndExport)
 @Component({
@@ -27,6 +28,7 @@ Diagram.Inject(PrintAndExport)
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    MatMenuModule,
     FontAwesomeModule,
     FaIconComponent,
     SymbolPaletteModule,
@@ -46,6 +48,7 @@ export class WhiteboardComponent implements OnDestroy {
     public faDownload = faDownload
     public faChevronCircleRight = faChevronCircleRight
     public faChevronCircleLeft = faChevronCircleLeft
+    public faRightFromBracket = faRightFromBracket
     public showShapes:boolean = true
     public whiteBoardConstants = whiteboardConstants
     public expandMode:ExpandMode = 'Multiple'
@@ -56,7 +59,26 @@ export class WhiteboardComponent implements OnDestroy {
      *
      * @param dialog : instance of MatDialog
      */
-    constructor(private dialog:MatDialog){}
+    constructor(
+      private dialog:MatDialog, 
+      private sharedService: SharedService,
+      private router: Router
+    ) {}
+
+    userInitial: string = '';
+
+    ngOnInit() {
+    /**
+     * To display the user initial as avatar after signing in
+     */
+    this.sharedService.getUserEmail().subscribe((email) => {
+      this.userInitial = email ? email[0].toUpperCase() : '';
+    });
+    }
+
+    public logout() {
+      this.router.navigate([''])
+    }
 
     /**
      *
@@ -187,4 +209,6 @@ export class WhiteboardComponent implements OnDestroy {
       this.ngDestroy.next(true);
       this.ngDestroy.complete();
     }
+
+
 }

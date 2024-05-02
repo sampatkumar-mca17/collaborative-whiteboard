@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SharedService } from '../services/shared.service';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -45,7 +46,7 @@ export class LoginComponent implements OnInit {
   faEnvelope = faEnvelope;
   faLock = faLock;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private sharedService: SharedService) {
 
   }
 
@@ -72,6 +73,7 @@ export class LoginComponent implements OnInit {
         user.email === this.email && user.password === this.password
     );
     if (existingUser) {
+      this.sharedService.setUserEmail(this.email);
       this.router.navigate(['whiteboard']);
     }
   }

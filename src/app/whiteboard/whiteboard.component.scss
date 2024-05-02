@@ -5,11 +5,25 @@
     & .spacer {
       flex: 1 1 auto;
     }
+    & .avatar{
+      color: #fff; 
+      padding: 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius:100%;
+      width:40px;
+      height: 40px;
+      font-weight: 600;
+      background-color: black;
+      cursor: pointer;
+    }
     & .export-action{
       display:flex;
       justify-content: center;
       align-items: center;
     }
+
   }
   & .body{
     display:flex;
