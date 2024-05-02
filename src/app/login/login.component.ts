@@ -10,7 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faLock, faCheckDouble, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
@@ -45,7 +45,9 @@ export class LoginComponent implements OnInit {
   rpassword = '';
   faEnvelope = faEnvelope;
   faLock = faLock;
-
+  faCheckDouble = faCheckDouble;
+  faUser = faUser;
+  
   constructor(private router: Router, private sharedService: SharedService) {
 
   }
