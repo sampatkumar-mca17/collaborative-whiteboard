@@ -1,0 +1,122 @@
+<div class="center-content">
+  <mat-card class="example-card">
+    <mat-card-header>
+      <mat-card-title>Welcome</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-tab-group>
+        <mat-tab label="Login">
+          <mat-form-field class="example-full-width">
+            <mat-label>Email</mat-label>
+            <div class="input-icon">
+              <input
+                type="email"
+                matInput
+                placeholder="Email"
+                value=""
+                [(ngModel)]="email"
+              />
+              <fa-icon [icon]="faEnvelope"></fa-icon>
+            </div>
+            <span class="error">{{ errorMsg_user }}</span>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width">
+            <mat-label>Password</mat-label>
+            <div class="input-icon">
+              <input
+                type="password"
+                matInput
+                placeholder="Password"
+                [(ngModel)]="password"
+              />
+              <fa-icon [icon]="faLock"></fa-icon>
+            </div>
+            <span class="error">{{ errorMsg_pwd }}</span>
+          </mat-form-field>
+          <p class="error">{{ errorMsg }}</p>
+          <button mat-button class="mat-button" (click)="login()">Login</button>
+          <div class="google-login">
+            <div
+              id="g_id_onload"
+              data-client_id="209891418886-of4pefsusbmj66vndcb6poi3hvn66jsd.apps.googleusercontent.com"
+              data-context="signin"
+              data-ux_mode="popup"
+              data-login_uri="http://localhost:3000/api/login"
+              data-auto_select="true"
+              data-itp_support="true"
+            ></div>
+            <div
+              class="g_id_signin"
+              data-type="standard"
+              data-shape="rectangular"
+              data-theme="outline"
+              data-text="signin_with"
+              data-size="large"
+              data-logo_alignment="left"
+            ></div>
+          </div>
+        </mat-tab>
+
+        <!-- REGISTER COMPONENT -->
+        <mat-tab label="Register">
+          <mat-form-field class="example-full-width">
+            <mat-label>Email</mat-label>
+            <div class="input-icon">
+              <input
+                type="email"
+                matInput
+                placeholder="Email"
+                value=""
+                [(ngModel)]="remail"
+              />
+              <fa-icon [icon]="faEnvelope"></fa-icon>
+            </div>
+            <span class="error">{{ errorMsg_user }}</span>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width">
+            <mat-label>Password</mat-label>
+            <div class="input-icon">
+              <input
+                type="password"
+                matInput
+                placeholder="Password"
+                [(ngModel)]="rpassword"
+              />
+              <fa-icon [icon]="faLock"></fa-icon>
+            </div>
+            <span class="error">{{ errorMsg_pwd }}</span>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <mat-label>Confirm Password</mat-label>
+            <div class="input-icon">
+              <input
+                type="password"
+                matInput
+                placeholder="Password"
+                [(ngModel)]="confirmpassword"
+              />
+              <fa-icon [icon]="faLock"></fa-icon>
+            </div>
+            <span class="error">{{ errorMsg_confirmPwd }}</span>
+          </mat-form-field>
+          <div class="policy-info">
+            By creating an account, you agree to the
+            <a>Terms of Service</a> and
+            <a>Privacy Policy</a>
+          </div>
+          <p class="success">{{ reg_successMsg }}</p>
+          <button
+            class="mat-button"
+            mat-button
+            color="primary"
+            (click)="register()"
+          >
+            Register
+          </button>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>

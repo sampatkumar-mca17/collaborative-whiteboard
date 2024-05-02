@@ -37,6 +37,8 @@
     "@syncfusion/ej2-angular-navigations": "^25.1.41",
     "@syncfusion/ej2-angular-popups": "^25.1.41",
     "@syncfusion/ej2-angular-splitbuttons": "^25.1.38",
+    "devextreme": "23.2.5",
+    "devextreme-angular": "23.2.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
