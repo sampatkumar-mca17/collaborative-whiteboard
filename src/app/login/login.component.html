@@ -12,15 +12,18 @@
             <mat-label>Email</mat-label>
             <div class="input-icon">
               <input
-                type="email"
                 matInput
+                type="email"
                 placeholder="Email"
-                value=""
-                [(ngModel)]="email"
-              />
+                [formControl]="email"
+                (blur)="updateEmailErrorMessage()"
+                required
+              >
               <fa-icon [icon]="faEnvelope"></fa-icon>
             </div>
-            <span class="error">{{ errorMsg_user }}</span>
+            @if (email.invalid) {
+              <mat-error>{{errorMsg_email}}</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field class="example-full-width">
@@ -30,11 +33,15 @@
                 type="password"
                 matInput
                 placeholder="Password"
-                [(ngModel)]="password"
-              />
+                [formControl]="password"
+                (blur)="updatePasswordErrorMessage()"
+                required
+              >
               <fa-icon [icon]="faLock"></fa-icon>
             </div>
-            <span class="error">{{ errorMsg_pwd }}</span>
+            @if (password.invalid) {
+              <mat-error>{{errorMsg_pwd}}</mat-error>
+            }
           </mat-form-field>
           <button mat-button class="mat-button" (click)="login()">Login</button>
           <div class="google-login">
@@ -68,12 +75,15 @@
                 type="email"
                 matInput
                 placeholder="Email"
-                value=""
-                [(ngModel)]="remail"
-              />
+                [formControl]="remail"
+                (blur)="updateRegEmailErrorMessage()"
+                required
+              >
               <fa-icon [icon]="faEnvelope"></fa-icon>
             </div>
-            <span class="error">{{ errorMsg_ruser }}</span>
+            @if (remail.invalid) {
+              <mat-error>{{errorMsg_reg_email}}</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field class="example-full-width">
@@ -83,11 +93,15 @@
                 type="password"
                 matInput
                 placeholder="Password"
-                [(ngModel)]="rpassword"
-              />
+                [formControl]="rpassword"
+                (blur)="updateRegPasswordErrorMessage()"
+                required
+              >
               <fa-icon [icon]="faLock"></fa-icon>
             </div>
-            <span class="error">{{ errorMsg_rpwd }}</span>
+            @if (rpassword.invalid) {
+              <mat-error>{{errorMsg_reg_pwd}}</mat-error>
+            }
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Confirm Password</mat-label>
@@ -96,11 +110,15 @@
                 type="password"
                 matInput
                 placeholder="Password"
-                [(ngModel)]="confirmpassword"
-              />
+                [formControl]="confirmpassword"
+                (blur)="updateConfirmPasswordErrorMessage()"
+                required
+              >
               <fa-icon [icon]="faCheckDouble"></fa-icon>
             </div>
-            <span class="error">{{ errorMsg_confirmPwd }}</span>
+            @if (confirmpassword.invalid) {
+              <mat-error>{{errorMsg_confirm_pwd}}</mat-error>
+            }
           </mat-form-field>
           <div class="policy-info">
             By creating an account, you agree to the
