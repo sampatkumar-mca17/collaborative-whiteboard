@@ -36,7 +36,6 @@
             </div>
             <span class="error">{{ errorMsg_pwd }}</span>
           </mat-form-field>
-          <p class="error">{{ errorMsg }}</p>
           <button mat-button class="mat-button" (click)="login()">Login</button>
           <div class="google-login">
             <div
@@ -74,7 +73,7 @@
               />
               <fa-icon [icon]="faEnvelope"></fa-icon>
             </div>
-            <span class="error">{{ errorMsg_user }}</span>
+            <span class="error">{{ errorMsg_ruser }}</span>
           </mat-form-field>
 
           <mat-form-field class="example-full-width">
@@ -88,7 +87,7 @@
               />
               <fa-icon [icon]="faLock"></fa-icon>
             </div>
-            <span class="error">{{ errorMsg_pwd }}</span>
+            <span class="error">{{ errorMsg_rpwd }}</span>
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Confirm Password</mat-label>
@@ -108,7 +107,6 @@
             <a>Terms of Service</a> and
             <a>Privacy Policy</a>
           </div>
-          <p class="success">{{ reg_successMsg }}</p>
           <button
             class="mat-button"
             mat-button

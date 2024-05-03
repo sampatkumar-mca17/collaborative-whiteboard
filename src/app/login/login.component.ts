@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from '../services/shared.service';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { faEnvelope, faLock, faCheckDouble, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -37,9 +38,9 @@ export class LoginComponent implements OnInit {
   confirmpassword = '';
   errorMsg_user = '';
   errorMsg_pwd = '';
+  errorMsg_ruser='';
+  errorMsg_rpwd='';
   errorMsg_confirmPwd = '';
-  errorMsg = '';
-  reg_successMsg = '';
   checked: false;
   remail = '';
   rpassword = '';
@@ -47,7 +48,8 @@ export class LoginComponent implements OnInit {
   faLock = faLock;
   faCheckDouble = faCheckDouble;
   faUser = faUser;
-  
+  toaster = inject(ToastrService)
+
   constructor(private router: Router, private sharedService: SharedService) {
 
   }
@@ -58,14 +60,11 @@ export class LoginComponent implements OnInit {
     // Reset error messages
     this.errorMsg_user = '';
     this.errorMsg_pwd = '';
-    this.errorMsg = '';
 
     if (this.email.trim().length === 0) {
-      this.errorMsg_user = '*Username is required!';
+      this.errorMsg_user = '*Email is required!';
     } else if (this.password.trim().length === 0) {
       this.errorMsg_pwd = '*Password is required!';
-    } else {
-      this.errorMsg = '*Invalid Credentials!';
     }
 
     // Check if the user already exists in local storage
@@ -76,26 +75,34 @@ export class LoginComponent implements OnInit {
     );
     if (existingUser) {
       this.sharedService.setUserEmail(this.email);
+      this.toaster.success("Login Successful!","Success", {
+        timeOut: 3000,
+      })
       this.router.navigate(['whiteboard']);
+    }
+
+    else {
+      this.toaster.error("*Invalid Credentials!","Error", {
+        timeOut: 2000,
+      })
     }
   }
 
   register() {
     // Reset error messages
-    this.errorMsg_user = '';
-    this.errorMsg_pwd = '';
+    this.errorMsg_ruser = '';
+    this.errorMsg_rpwd = '';
     this.errorMsg_confirmPwd = '';
-    this.errorMsg = '';
 
     // Validate username
     if (this.remail.trim().length === 0) {
-      this.errorMsg_user = '*Username is required!';
+      this.errorMsg_user = '*Email is required!';
       return;
     }
 
     // Validate password
     if (this.rpassword.trim().length === 0) {
-      this.errorMsg_pwd = '*Password is required!';
+      this.errorMsg_rpwd = '*Password is required!';
       return;
     }
 
@@ -116,13 +123,15 @@ export class LoginComponent implements OnInit {
       (user: any) => user.email === this.remail
     );
     if (existingUser) {
-      this.errorMsg_user = '*Username already exists!';
+      this.errorMsg_ruser = '*Email already exists!';
       return;
     }
 
     // If everything is valid, store the new user in local storage
     existingUsers.push({ email: this.remail, password: this.rpassword });
     localStorage.setItem('users', JSON.stringify(existingUsers));
-    this.reg_successMsg = "Account created successfully!";
+    this.toaster.success("Account Created Successfully! Please Login!","Success", {
+      timeOut: 3000,
+    })
     }
 }
