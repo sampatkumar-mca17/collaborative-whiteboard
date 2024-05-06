@@ -18,11 +18,11 @@
                 [formControl]="email"
                 (blur)="updateEmailErrorMessage()"
                 required
-              >
+              />
               <fa-icon [icon]="faEnvelope"></fa-icon>
             </div>
             @if (email.invalid) {
-              <mat-error>{{errorMsg_email}}</mat-error>
+            <mat-error>{{ errorMsg_email }}</mat-error>
             }
           </mat-form-field>
 
@@ -36,11 +36,11 @@
                 [formControl]="password"
                 (blur)="updatePasswordErrorMessage()"
                 required
-              >
+              />
               <fa-icon [icon]="faLock"></fa-icon>
             </div>
             @if (password.invalid) {
-              <mat-error>{{errorMsg_pwd}}</mat-error>
+            <mat-error>{{ errorMsg_pwd }}</mat-error>
             }
           </mat-form-field>
           <button mat-button class="mat-button" (click)="login()">Login</button>
@@ -78,11 +78,11 @@
                 [formControl]="remail"
                 (blur)="updateRegEmailErrorMessage()"
                 required
-              >
+              />
               <fa-icon [icon]="faEnvelope"></fa-icon>
             </div>
             @if (remail.invalid) {
-              <mat-error>{{errorMsg_reg_email}}</mat-error>
+            <mat-error>{{ errorMsg_reg_email }}</mat-error>
             }
           </mat-form-field>
 
@@ -96,11 +96,11 @@
                 [formControl]="rpassword"
                 (blur)="updateRegPasswordErrorMessage()"
                 required
-              >
+              />
               <fa-icon [icon]="faLock"></fa-icon>
             </div>
             @if (rpassword.invalid) {
-              <mat-error>{{errorMsg_reg_pwd}}</mat-error>
+            <mat-error>{{ errorMsg_reg_pwd }}</mat-error>
             }
           </mat-form-field>
           <mat-form-field class="example-full-width">
@@ -113,17 +113,17 @@
                 [formControl]="confirmpassword"
                 (blur)="updateConfirmPasswordErrorMessage()"
                 required
-              >
+              />
               <fa-icon [icon]="faCheckDouble"></fa-icon>
             </div>
             @if (confirmpassword.invalid) {
-              <mat-error>{{errorMsg_confirm_pwd}}</mat-error>
+            <mat-error>{{ errorMsg_confirm_pwd }}</mat-error>
             }
           </mat-form-field>
           <div class="policy-info">
             By creating an account, you agree to the
-            <a>Terms of Service</a> and
-            <a>Privacy Policy</a>
+            <a href="">Terms of Service</a> and
+            <a href="">Privacy Policy</a>
           </div>
           <button
             class="mat-button"
