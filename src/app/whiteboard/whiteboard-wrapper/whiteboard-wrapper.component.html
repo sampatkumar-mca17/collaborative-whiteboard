@@ -1,0 +1,48 @@
+<div class="whiteboard-container">
+  <mat-toolbar class="toolbar">
+    <div class="header-title" style="display:flex; align-items: center; gap:0.5rem">
+      @if (userData?.photoURL) {
+        <img width="50" height="50" style="border-radius: 50%;" src="" alt="" [srcset]="userData.photoURL">
+      }
+
+      <span>Whiteboard</span>
+    </div>
+
+    <div class="actions">
+      <button  [mat-menu-trigger-for]="collabMenu" mat-button aria-label="Example icon-button with heart icon">
+        <fa-icon [icon]="faHandshake"/>
+        Remote Collaboration
+      </button>
+      @if (!isLoggedIn) {
+        <button mat-button [mat-menu-trigger-for]="loginMenu" aria-label="Example icon-button with heart icon">
+          <fa-icon [icon]="faSignIn"/>
+          Login
+        </button>
+      }
+      @else {
+        <button mat-button aria-label="Example icon-button with heart icon" (click)="logout()">
+          <fa-icon [icon]="faSignOut"/>
+          Logout
+        </button>
+      }
+    </div>
+  </mat-toolbar>
+  <router-outlet/>
+</div>
+
+
+<mat-menu #collabMenu>
+  <div class="collab-menu">
+    <span class="head">Invite a friend</span>
+    <span (click)="copyCollabURL()" mat-menu-item >
+      <span>{{collabURL}}</span>
+      <fa-icon [icon]="faCopy"></fa-icon>
+    </span>
+  </div>
+</mat-menu>
+
+<mat-menu #loginMenu>
+  <div class="collab-menu">
+    <app-login/>
+  </div>
+</mat-menu>

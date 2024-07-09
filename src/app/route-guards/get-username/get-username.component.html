@@ -1,0 +1,6 @@
+
+<mat-form-field mat-dialog-content>
+  <mat-label>Choose a username</mat-label>
+  <input #usernameInput matInput/>
+</mat-form-field>
+<button mat-button color="primary" [disabled]="!usernameInput.value" [mat-dialog-close]="usernameInput.value">done</button>
