@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WhiteboardComponent } from './whiteboard.component';
+import { WhiteBoardComponent } from './whiteboard.component';
 
 describe('WhiteboardComponent', () => {
-  let component: WhiteboardComponent;
-  let fixture: ComponentFixture<WhiteboardComponent>;
+  let component: WhiteBoardComponent;
+  let fixture: ComponentFixture<WhiteBoardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WhiteboardComponent]
+      imports: [WhiteBoardComponent]
     })
     .compileComponents();
-    
-    fixture = TestBed.createComponent(WhiteboardComponent);
+
+    fixture = TestBed.createComponent(WhiteBoardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

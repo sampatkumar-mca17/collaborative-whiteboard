@@ -7,10 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faHandshake, faCopy, faSignOut, faSignIn } from '@fortawesome/free-solid-svg-icons';
-import { Toast, ToastrModule, ToastrService } from 'ngx-toastr';
-import { FirebaseApp, initializeApp } from 'firebase/app';
-import * as CONSTANTS from '../../constants'
-import { Auth, getAuth, User } from 'firebase/auth';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { FirebaseApp } from '@angular/fire/app';
+import { Auth, User } from '@angular/fire/auth';
 import { SharedService } from '../../services/shared.service';
 import { LoginComponent } from "../../login/login.component";
 

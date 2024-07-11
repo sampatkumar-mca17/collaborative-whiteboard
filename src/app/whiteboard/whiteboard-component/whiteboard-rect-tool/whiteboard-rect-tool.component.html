@@ -1,0 +1,16 @@
+
+<div
+class="tool_button"
+matTooltip="Square/Rect Tool"
+[class.active]="selectedTool === toolsEnum.RECT"
+(click)="toolSelectionChanged()"
+>
+<svg
+  viewBox="0 0 27 27"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+>
+  <path d="M 0 8 L 0 24 L 24 24 L 25 8 L 0 8 Z" />
+</svg>
+</div>

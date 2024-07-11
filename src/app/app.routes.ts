@@ -10,7 +10,7 @@ export const routes: Routes = [
     children:[
       {
         path:'',
-        loadComponent:() => import('./whiteboard/whiteboard.component').then((c)=> c.WhiteBoardComponent)
+        loadComponent:() => import('./whiteboard/whiteboard-component/whiteboard.component').then((c)=> c.WhiteBoardComponent)
       }
     ]
   },

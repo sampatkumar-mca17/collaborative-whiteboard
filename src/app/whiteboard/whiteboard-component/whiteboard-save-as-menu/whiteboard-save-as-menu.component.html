@@ -1,0 +1,16 @@
+<div class="menu">
+  <div class="menu_title" title="Save Board">
+    <svg viewBox="0 0 20 20" width="20" height="20">
+      <path
+        d="M12.984 12.656l2.625-2.578 1.406 1.406-5.016 5.016-5.016-5.016 1.406-1.406 2.625 2.578v-9.656h1.969v9.656zM18.984 12h2.016v6.984q0 0.797-0.609 1.406t-1.406 0.609h-13.969q-0.797 0-1.406-0.609t-0.609-1.406v-6.984h2.016v6.984h13.969v-6.984z"
+        fill="#565a66"
+      ></path>
+    </svg>
+  </div>
+  <div class="menu_list inverted-undo" id="file_menu">
+    <div class="menu_item" (click)="saveAs(formatTypes.Png)">Save as PNG</div>
+    <div class="menu_item" (click)="saveAs(formatTypes.Jpeg)">Save as JPEG</div>
+    <div class="menu_item" (click)="saveAs(formatTypes.Svg)">Save as SVG</div>
+    <div class="menu_item" (click)="saveAs(formatTypes.Base64)">Copy Base-64</div>
+  </div>
+</div>

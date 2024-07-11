@@ -3,9 +3,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ToastrService } from 'ngx-toastr';
-import { FirebaseApp, initializeApp } from 'firebase/app';
-import { Auth, getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-import * as CONSTANTS from '../constants'
+import { FirebaseApp } from '@angular/fire/app';
+import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth'
 import { SharedService } from '../services/shared.service';
 
 @Component({

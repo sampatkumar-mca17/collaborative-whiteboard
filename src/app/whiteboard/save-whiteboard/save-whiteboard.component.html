@@ -1,0 +1,7 @@
+<mat-form-field matDialogContent>
+  <mat-label>Name</mat-label>
+  <input matInput [formControl]="nameControl">
+  <mat-hint> Provide a new name for the board</mat-hint>
+</mat-form-field>
+<button matDialogActions [disabled]="nameControl.invalid" [mat-dialog-close]="nameControl.value">Save</button>
+
