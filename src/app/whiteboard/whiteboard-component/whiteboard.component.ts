@@ -7,7 +7,7 @@ import { WHITEBOARD_OPTIONS, WHITEBOARD_OUTER_HEIGHT, WHITEBOARD_OUTER_WIDTH, WH
 import { FluidModelService } from '../../core/fluid- model.service';
 import { MouseTracker } from '../../core/mouse-tracker';
 import { renderMousePresence } from '../../shared/helpers';
-import { addDoc, collection, Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, doc, Firestore, getDoc, updateDoc } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SharedService } from '../../services/shared.service';
@@ -29,6 +29,8 @@ import { WhiteboardTextToolComponent } from "./whiteboard-text-tool/whiteboard-t
 import { WhiteboardEraserToolComponent } from './whiteboard-eraser-tool/whiteboard-eraser-tool.component';
 import { WhiteboardColorToolComponent } from './whiteboard-color-tool/whiteboard-color-tool.component';
 import { WhiteboardZoomPanelComponent } from './whiteboard-zoom-panel/whiteboard-zoom-panel.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-whiteboard-component',
@@ -69,6 +71,7 @@ export class WhiteBoardComponent implements OnInit {
   protected selectedElement: WhiteboardElement | null = null;
   protected options = WHITEBOARD_OPTIONS;
   protected zoom = WHITEBOARD_ZOOM;
+  protected isLoggedIn:boolean;
   private outerWidth = WHITEBOARD_OUTER_WIDTH;
   private outerHeight = WHITEBOARD_OUTER_HEIGHT;
   private x = WHITEBOARD_X;
@@ -79,8 +82,19 @@ export class WhiteBoardComponent implements OnInit {
 
   @ViewChild('mouseTrackerDiv', { static: true }) mouseTrackerDiv: ElementRef = {} as ElementRef;
   triggeredFromBehaviouSubject: boolean;
+  boardID: string;
+  boardLoading: boolean;
+  base64Img: string;
 
-  constructor(private _whiteboardService: NgWhiteboardService, private fluidService: FluidModelService, private sharedService:SharedService, private dialog:MatDialog, private toaster:ToastrService ) {}
+  constructor(
+    private _whiteboardService: NgWhiteboardService,
+    private fluidService: FluidModelService,
+    public sharedService:SharedService,
+    private dialog:MatDialog,
+    private toaster:ToastrService,
+    private router:Router,
+    private route: ActivatedRoute
+  ) {}
   /**------------------------------------ Public Methods Start Here ----------------------------------------- */
 
   /**
@@ -106,9 +120,14 @@ export class WhiteBoardComponent implements OnInit {
   }
 
   ngOnInit(){
+    this.sharedService.setHasWhiteBoardLoaded(true);
     this.initializeFluidService()
     this.auth = this.sharedService.getAuth();
     this.fireStore = this.sharedService.getFirestore();
+    this.sharedService.isLoggedIn().subscribe(loggedIn => {
+      this.isLoggedIn = !!loggedIn;
+    })
+    this.checkForMode();
   }
 
   /**
@@ -270,6 +289,7 @@ export class WhiteBoardComponent implements OnInit {
   onSave(img: string) {
     const cb = navigator.clipboard;
     if (cb) {
+      this.base64Img = img
       cb.writeText(img);
     }
   }
@@ -278,12 +298,20 @@ export class WhiteBoardComponent implements OnInit {
    * saves the diagram to firestore
    */
   SaveToDB():void{
-    const dialog = this.dialog.open(SaveWhiteboardComponent)
-    dialog.afterClosed().subscribe(result => {
-      if(result){
-        this.saveToFirestore(result)
-      }
-    });
+    if(!this.boardID){
+      const dialog = this.dialog.open(SaveWhiteboardComponent,{
+        width:'300px'
+      })
+      dialog.afterClosed().subscribe(result => {
+        if(result){
+          this.saveToFirestore(result)
+        }
+      });
+      return;
+    }
+    this.saveToFirestore()
+
+
   }
   /**------------------------------------ Public Methods End Here ----------------------------------------- */
 
@@ -293,14 +321,40 @@ export class WhiteBoardComponent implements OnInit {
    * @param name -> this is the user defined name provided for whiteboard
    * stores the diagram data to firestore
    */
-  private saveToFirestore(name:string):void{
+  private async saveToFirestore(name?:string):Promise<void>{
+    this.saveAs(FormatType.Base64);
+    setTimeout(() => {
+      if(this.boardID){
+        this.editDoc();
+      }
+      else{
+        this.addDoc(name);
+      }
+    }, 600);
+  }
+
+  private addDoc(name:string){
+    const id = crypto.randomUUID();
     addDoc(collection(this.fireStore, 'boards'),{
-      user: this.auth?.currentUser?.email,
-      board: this.whiteboard.data,
+      user: this.auth?.currentUser?.email || null,
+      board: JSON.stringify(this.whiteboard.data),
       name,
-      id: crypto.randomUUID()
+      id: id,
+      boardBase64:this.base64Img
     }).then((_)=>{
+      this.boardID = _.id;
+      this.router.navigate(['/whiteboard/board/'+this.boardID]);
+      this.initializeFluidService();
       this.toaster.success('Board saved successfully', 'Success');
+    })
+  }
+
+  private editDoc(){
+    updateDoc(doc(this.fireStore, 'boards', this.boardID),{
+      board: JSON.stringify(this.whiteboard.data),
+      boardBase64:this.base64Img
+    }).then(_ => {
+      this.toaster.success('Board updated successfully', 'Success');
     })
   }
   /**
@@ -357,14 +411,48 @@ export class WhiteBoardComponent implements OnInit {
    * Initializes fluid relay service
    */
   private async initializeFluidService(){
-    await this.fluidService.initFluid()
-    this.myself = await this.fluidService.fluidData?.services.audience.getMyself();
-    this.fluidService.behaviorSubjectObservable$.subscribe(data =>{
-      this.triggeredFromBehaviouSubject = true
-      this.whiteboard.data = data.elementToBeDrawn
+   this.sharedService.hasWhiteBoardLoaded$().subscribe(async loaded => {
+      if(loaded){
+        await this.fluidService.initFluid()
+        this.myself = await this.fluidService.fluidData?.services.audience.getMyself();
+        this.fluidService.behaviorSubjectObservable$.subscribe(data =>{
+          this.triggeredFromBehaviouSubject = true
+          this.whiteboard.data = data.elementToBeDrawn
+        })
+        renderMousePresence(this.fluidService.mouseTracker as MouseTracker,
+        this.mouseTrackerDiv.nativeElement as HTMLDivElement , this.myself);
+      }
     })
-    renderMousePresence(this.fluidService.mouseTracker as MouseTracker,
-    this.mouseTrackerDiv.nativeElement as HTMLDivElement , this.myself);
+
   }
-  /**------------------------------------ Private Methods End Here ---------------------------------------- */
+  /**
+   * Updates the whiteboard with stored data in case of existing boards
+   */
+  private setBoard(){
+    const c = collection(this.fireStore, 'boards');
+    const d = doc(c, this.boardID);
+    this.boardLoading = true
+    getDoc(d).then(d=>{
+      this.boardLoading = false;
+      this.fluidService.updatewhiteBoardSharedMap(JSON.parse(d.data()['board']));
+    })
+  }
+
+  /**
+   * checks and updates the board based on the mode , i.e create or update
+   */
+  private checkForMode(){
+    this.route.params.subscribe(params => {
+      if(params['id']){
+        this.boardID = params['id'];
+        this.setBoard();
+      }
+      else{
+        if(location.hash !== this.fluidService?.fluidData?.containerID){
+          this.fluidService.updatewhiteBoardSharedMap(null);
+        }
+      }
+    })
+  }
+  /*------------------------------------ Private Methods End Here ---------------------------------------- */
 }

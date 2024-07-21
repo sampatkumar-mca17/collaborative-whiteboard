@@ -3,5 +3,8 @@
   <input matInput [formControl]="nameControl">
   <mat-hint> Provide a new name for the board</mat-hint>
 </mat-form-field>
-<button matDialogActions [disabled]="nameControl.invalid" [mat-dialog-close]="nameControl.value">Save</button>
+<div matDialogActions [style.paddingLeft]="'1.5rem'">
+  <button mat-raised-button [disabled]="nameControl.invalid" [mat-dialog-close]="nameControl.value">Save</button>
+</div>
+
 

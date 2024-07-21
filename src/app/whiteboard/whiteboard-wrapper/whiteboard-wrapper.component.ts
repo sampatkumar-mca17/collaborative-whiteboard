@@ -2,11 +2,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Component, inject } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faHandshake, faCopy, faSignOut, faSignIn } from '@fortawesome/free-solid-svg-icons';
+import { faHandshake, faCopy, faSignOut, faSignIn, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { FirebaseApp } from '@angular/fire/app';
 import { Auth, User } from '@angular/fire/auth';
@@ -34,6 +34,8 @@ export class WhiteboardWrapperComponent {
   protected faCopy = faCopy;
   protected faSignOut = faSignOut;
   protected faSignIn = faSignIn
+  protected faChevronLeft = faChevronLeft
+  protected enableGoToBoards:boolean;
   protected isLoggedIn:boolean;
   private toaster = inject(ToastrService)
   app: FirebaseApp;
@@ -42,7 +44,7 @@ export class WhiteboardWrapperComponent {
   get collabURL():string{
     return location.href?.substring(0,20) + '...'
   }
-  constructor(private sharedService: SharedService){}
+  constructor(private sharedService: SharedService, private _router:Router){}
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
@@ -50,6 +52,9 @@ export class WhiteboardWrapperComponent {
     this.sharedService.isLoggedIn().subscribe((userData:User) => {
       this.userData = userData;
       this.isLoggedIn = !!this.userData;
+    })
+    this.sharedService.hasWhiteBoardLoaded$().subscribe(loaded =>{
+      this.enableGoToBoards = loaded;
     })
   }
   public logout():void{

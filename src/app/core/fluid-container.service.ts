@@ -51,7 +51,8 @@ export class FluidContainerService {
             container: container,
             services: services,
             sharedMap: container.initialObjects['map'] as SharedMap,
-            signaler: container.initialObjects['signaler'] as SignalManager
+            signaler: container.initialObjects['signaler'] as SignalManager,
+            containerID: containerId
         };
     }
 

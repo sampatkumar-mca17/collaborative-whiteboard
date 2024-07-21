@@ -11,6 +11,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class SharedService {
   private isLoggedInSubject: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+  private isWhiteBoardComponentLoadedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   constructor(private app: FirebaseApp, private auth: Auth, private fireStore:Firestore){
     this.auth.onAuthStateChanged((stateChanged)=>{
       this.isLoggedInSubject.next(stateChanged)
@@ -29,5 +30,11 @@ export class SharedService {
   }
   public getFirestore():Firestore{
     return this.fireStore;
+  }
+  public setHasWhiteBoardLoaded(loaded:boolean):void{
+    this.isWhiteBoardComponentLoadedSubject.next(loaded);
+  }
+  public hasWhiteBoardLoaded$():Observable<boolean>{
+    return this.isWhiteBoardComponentLoadedSubject.asObservable();;
   }
 }

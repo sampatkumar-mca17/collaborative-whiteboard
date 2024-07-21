@@ -1,0 +1,50 @@
+.grid-container {
+  padding: 0 20px;
+  & .heading{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  & .cursor-pointer{
+    cursor: pointer;
+  }
+  & .title-and-action{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+  }
+}
+
+.dashboard-card {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+}
+
+.more-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.dashboard-card-content {
+  text-align: center;
+  cursor: pointer;
+}
+
+.loader{
+  position: absolute;
+  left: 50%;
+  top: 40%;
+}
+
+.null-state{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  height: 75vh;
+}

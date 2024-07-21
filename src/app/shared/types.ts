@@ -6,5 +6,6 @@ export type FluidData = {
     container: IFluidContainer,
     services: AzureContainerServices,
     sharedMap: SharedMap,
-    signaler: SignalManager
+    signaler: SignalManager,
+    containerID:string
 };

@@ -4,11 +4,16 @@
       @if (userData?.photoURL) {
         <img width="50" height="50" style="border-radius: 50%;" src="" alt="" [srcset]="userData.photoURL">
       }
-
       <span>Whiteboard</span>
     </div>
 
     <div class="actions">
+      @if(enableGoToBoards){
+        <button mat-button aria-label="Example icon-button with heart icon" [routerLink]="'/whiteboard/'">
+          <fa-icon [icon]="faChevronLeft"/>
+          Go To Boards
+        </button>
+      }
       <button  [mat-menu-trigger-for]="collabMenu" mat-button aria-label="Example icon-button with heart icon">
         <fa-icon [icon]="faHandshake"/>
         Remote Collaboration

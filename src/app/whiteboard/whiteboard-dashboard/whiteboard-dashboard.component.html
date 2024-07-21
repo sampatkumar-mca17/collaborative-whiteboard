@@ -1,0 +1,46 @@
+<div class="grid-container">
+  <div class="heading">
+    <h1>Boards</h1>
+    <div class="actions">
+      <!-- <button mat-raised-button (click)="deleteAllBoards()">Delete all boards</button> -->
+      <button mat-raised-button color="primary" [routerLink]="['/whiteboard/board']" routerLinkActive="router-link-active" >Create new board</button>
+    </div>
+  </div>
+
+  @if (!boardsLoading) {
+    @if ((cards |async).length > 0) {
+      <mat-grid-list [cols]="isHandset?'1':'4'" rowHeight="350px" >
+        @for (card of cards | async; track card) {
+          <mat-grid-tile [colspan]="card.cols" [rowspan]="card.rows">
+            <mat-card class="dashboard-card">
+              <mat-card-header>
+                <div class="title-and-action">
+                  <mat-card-title>
+                      {{card.boardData['name']}}
+                  </mat-card-title>
+                  <fa-icon class="cursor-pointer" (click)="deleteBoard(card)" [icon]="faTrash"></fa-icon>
+                </div>
+              </mat-card-header>
+              <mat-card-content class="dashboard-card-content" (click)="loadBoard(card)">
+                <div>
+                 <img width="200" height="200" [src]="card.boardURL">
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </mat-grid-tile>
+        }
+      </mat-grid-list>
+    }
+    @else {
+     <span class="null-state">
+      No Boards Created
+     </span>
+    }
+
+  }
+  @else {
+    <mat-spinner class="loader" [diameter]="50"></mat-spinner>
+  }
+
+
+</div>

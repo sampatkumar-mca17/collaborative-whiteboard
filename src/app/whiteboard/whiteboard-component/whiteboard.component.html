@@ -47,7 +47,8 @@
       <app-whiteboard-add-image (onImageAdd)="addImage($event)" />
       <app-whiteboard-undo (onUndo)="undo()" />
       <app-whiteboard-redo (onRedo)="redo()" />
-      <app-whiteboard-save-to-db (onSaveToDB)="SaveToDB()" />
+      <app-whiteboard-save-to-db [disabled]="!isLoggedIn" (onSaveToDB)="SaveToDB()" />
+      <span *ngIf="!isLoggedIn" [style.color]="'#fff'"> Warning: login to save your board </span>
     </div>
     <div id="tools_left" class="tools_panel">
       <app-whitebord-button-tool
