@@ -9,15 +9,17 @@
 
     <div class="actions">
       @if(enableGoToBoards){
-        <button mat-button aria-label="Example icon-button with heart icon" [routerLink]="'/whiteboard/'">
+        <button mat-button aria-label="Example icon-button with heart icon" [routerLink]="'/whiteboard/dashboard'">
           <fa-icon [icon]="faChevronLeft"/>
           Go To Boards
         </button>
       }
-      <button  [mat-menu-trigger-for]="collabMenu" mat-button aria-label="Example icon-button with heart icon">
-        <fa-icon [icon]="faHandshake"/>
-        Remote Collaboration
-      </button>
+      @if (enableGoToBoards) {
+        <button [mat-menu-trigger-for]="collabMenu" mat-button aria-label="Example icon-button with heart icon">
+          <fa-icon [icon]="faHandshake"/>
+          Remote Collaboration
+        </button>
+      }
       @if (!isLoggedIn) {
         <button mat-button [mat-menu-trigger-for]="loginMenu" aria-label="Example icon-button with heart icon">
           <fa-icon [icon]="faSignIn"/>

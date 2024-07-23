@@ -3,7 +3,7 @@
     <h1>Boards</h1>
     <div class="actions">
       <!-- <button mat-raised-button (click)="deleteAllBoards()">Delete all boards</button> -->
-      <button mat-raised-button color="primary" [routerLink]="['/whiteboard/board']" routerLinkActive="router-link-active" >Create new board</button>
+      <button mat-raised-button color="primary" (click)="createNewBoard()" >Create new board</button>
     </div>
   </div>
 
@@ -33,7 +33,7 @@
     }
     @else {
      <span class="null-state">
-      No Boards Created
+      {{userData? 'No Boards Created':'Please login to see the boards'}}
      </span>
     }
 

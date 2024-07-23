@@ -66,12 +66,14 @@ export class WhiteboardDashboardComponent {
   }
 
   deleteBoard(card:Card){
-    const c = collection(this.firestore, 'boards');
-    this.boardsLoading = true;
-    deleteDoc(doc(c, card.boardID)).then(_ => {
-      this.toaster.success('Board deleted successfully', 'Success');
-      this.getBoards();
-    });
+    if(confirm('Are you sure you want to delete ' + card?.boardData['name'])){
+      const c = collection(this.firestore, 'boards');
+      this.boardsLoading = true;
+      deleteDoc(doc(c, card.boardID)).then(_ => {
+        this.toaster.success('Board deleted successfully', 'Success');
+        this.getBoards();
+      });
+    }
   }
 
   deleteAllBoards(){
@@ -81,6 +83,10 @@ export class WhiteboardDashboardComponent {
       this.toaster.success('All boards deleted successfully', 'Success');
       this.getBoards();
     });
+  }
+
+  createNewBoard(){
+    this._router.navigateByUrl('/whiteboard/board');
   }
 
   private getBoards(){

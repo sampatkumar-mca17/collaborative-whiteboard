@@ -412,6 +412,9 @@ export class WhiteBoardComponent implements OnInit {
    */
   private async initializeFluidService(){
    this.sharedService.hasWhiteBoardLoaded$().subscribe(async loaded => {
+      if(!location.hash){
+              location.hash = this.fluidService?.fluidData?.containerID ?? ''
+      }
       if(loaded){
         await this.fluidService.initFluid()
         this.myself = await this.fluidService.fluidData?.services.audience.getMyself();
@@ -423,7 +426,6 @@ export class WhiteBoardComponent implements OnInit {
         this.mouseTrackerDiv.nativeElement as HTMLDivElement , this.myself);
       }
     })
-
   }
   /**
    * Updates the whiteboard with stored data in case of existing boards
@@ -452,6 +454,7 @@ export class WhiteBoardComponent implements OnInit {
           this.fluidService.updatewhiteBoardSharedMap(null);
         }
       }
+      this.sharedService.setIsNewBoard(!this.boardID);
     })
   }
   /*------------------------------------ Private Methods End Here ---------------------------------------- */

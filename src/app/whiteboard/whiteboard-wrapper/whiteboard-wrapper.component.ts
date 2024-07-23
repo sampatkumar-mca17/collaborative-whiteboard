@@ -1,4 +1,3 @@
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Component, inject } from '@angular/core';
@@ -12,6 +11,9 @@ import { FirebaseApp } from '@angular/fire/app';
 import { Auth, User } from '@angular/fire/auth';
 import { SharedService } from '../../services/shared.service';
 import { LoginComponent } from "../../login/login.component";
+import { CommonModule } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import * as Sentry from '@sentry/angular'
 
 @Component({
   selector: 'app-whiteboard-wrapper',
@@ -24,11 +26,14 @@ import { LoginComponent } from "../../login/login.component";
     MatMenuModule,
     FontAwesomeModule,
     ToastrModule,
-    LoginComponent
+    LoginComponent,
+    CommonModule,
+    MatTooltipModule
 ],
   templateUrl: './whiteboard-wrapper.component.html',
   styleUrl: './whiteboard-wrapper.component.scss'
 })
+@Sentry.TraceClass({ name: "Whieboard Wrapper" })
 export class WhiteboardWrapperComponent {
   protected faHandshake = faHandshake;
   protected faCopy = faCopy;
@@ -44,7 +49,20 @@ export class WhiteboardWrapperComponent {
   get collabURL():string{
     return location.href?.substring(0,20) + '...'
   }
-  constructor(private sharedService: SharedService, private _router:Router){}
+  constructor(private sharedService: SharedService, private router:Router){
+    Sentry.captureFeedback({ message: "I really like your App, thanks!" },
+      {
+        captureContext: {
+          tags: { key: "value" },
+        },
+        attachments: [
+          {
+            filename: "screenshot.png",
+            data: "base64-encoded-image",
+          },
+        ],
+      },)
+  }
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
@@ -65,7 +83,7 @@ export class WhiteboardWrapperComponent {
   public copyCollabURL():void{
     const cb = navigator.clipboard;
     if (cb) {
-      cb.writeText(location.href);
+      cb.writeText(new URL(location.href).host+'/whiteboard/board'+location.hash??'');
       this.toaster.success('URL copied.. Share it with your friend and enjoy collaboration!')
     }
   }
