@@ -1,0 +1,1 @@
+import{f as a}from"./chunk-UD3QEMP6.js";import"./chunk-IG7OMXB2.js";import"./chunk-CBYG2KFU.js";import"./chunk-HGITZB6Y.js";import"./chunk-JPNHJXW6.js";import"./chunk-SO6VPFYA.js";export{a as WhiteboardWrapperComponent};

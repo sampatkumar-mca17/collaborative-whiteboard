@@ -1,0 +1,1 @@
+import{a}from"./chunk-4UPZMNLZ.js";import"./chunk-CBYG2KFU.js";import"./chunk-HGITZB6Y.js";import"./chunk-TIWCUDTS.js";import"./chunk-JPNHJXW6.js";import"./chunk-SO6VPFYA.js";export{a as WhiteBoardComponent};
