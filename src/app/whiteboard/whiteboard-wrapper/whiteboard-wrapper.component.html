@@ -7,11 +7,11 @@
             <fa-icon [icon]="faChevronLeft" [routerLink]="'/whiteboard/dashboard'"/>
         </div>
       }
+      <div class="title">
+        <img width="50" height="50" src="assets/title.png">
+         <span>Whiteboard</span>
+      </div>
 
-      @if (userData?.photoURL) {
-        <img width="50" height="50" style="border-radius: 50%;" src="" alt="" [srcset]="userData.photoURL">
-      }
-      <span>Whiteboard</span>
     </div>
 
     <div class="actions" [ngClass]="{handset:isHandset}">
@@ -43,13 +43,8 @@
           </button>
       }
       @else {
-        <button mat-button aria-label="Example icon-button with heart icon" (click)="logout()">
-          <fa-icon [icon]="faSignOut"/>
-          @if (!isHandset) {
-            <span>
-              Logout
-            </span>
-          }
+        <button mat-icon-button [mat-menu-trigger-for]="logoutMenu" aria-label="Example icon-button with heart icon">
+          <img width="50" height="50" style="border-radius: 50%;" src="" alt="" [srcset]="userData.photoURL">
         </button>
       }
     </div>
@@ -71,5 +66,11 @@
 <mat-menu #loginMenu>
   <div class="collab-menu">
     <app-login/>
+  </div>
+</mat-menu>
+
+<mat-menu #logoutMenu>
+  <div class="collab-menu">
+    <app-login [logout]="true"/>
   </div>
 </mat-menu>

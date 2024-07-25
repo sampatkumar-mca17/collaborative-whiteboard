@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -18,7 +18,7 @@ import { SharedService } from '../services/shared.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-
+  @Input() logout:boolean;
   faGoogle = faGoogle;
   app:FirebaseApp;
   auth:Auth;
@@ -60,7 +60,12 @@ export class LoginComponent implements OnInit {
         this.toaster.error('Login Failed', 'Failed');
         // ...
       });
+  }
 
+  logoutApp(){
+    this.auth.signOut().then(_ => {
+      this.toaster.success('Logged Out Successfully', 'Success');
+    })
   }
 
 }
