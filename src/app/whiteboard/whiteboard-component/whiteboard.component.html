@@ -1,11 +1,5 @@
 <div class="whiteboard-container">
   <div class="editor">
-    <div id="rulers">
-      <div id="ruler_corner"></div>
-      <div id="ruler_x"></div>
-      <div id="ruler_y"></div>
-    </div>
-
     <div
       #workarea
       id="workarea"
@@ -13,83 +7,97 @@
       style="overflow: scroll"
       (mousewheel)="zoomWheel($event)"
     >
-      <div id="svgcanvas">
-        <ng-whiteboard
-          #whiteboard
-          [selectedTool]="selectedTool"
-          [options]="options"
-          (selectElement)="setSelectedElement($event)"
-          (save)="onSave($event)"
-          [strokeWidth]="options.strokeWidth"
-          (toolChanged)="selectedTool = $event"
-          [zoom]="zoom"
-          [canvasHeight]="options.canvasHeight"
-          [canvasWidth]="options.canvasWidth"
-          [center]="true"
-          [fullScreen]="false"
-          [strokeColor]="options.strokeColor"
-          [fill]="options.fill"
-          [backgroundColor]="options.backgroundColor"
-          (selectElement)="dataChanged()"
-          (undo)="dataChanged()"
-          (redo)="dataChanged()"
-          (click)="dataChanged()"
-          (drag)="dataChanged()"
-          (drop)="dataChanged()"
-          (drag)="dataChanged()"
-        >
-        </ng-whiteboard>
+      <h3 class="menubar-title" *ngIf="isHandset">
+        Menubar
+      </h3>
+      <div id="menu_bar" class="active" [ngClass]="{horizontal:isHandset}">
+        <app-whiteboard-new-document (onNewDocument)="newDocument()" />
+        <app-whiteboard-save-as-menu (onSaveAs)="saveAs($event)" />
+        <app-whiteboard-add-image (onImageAdd)="addImage($event)" />
+        <app-whiteboard-undo (onUndo)="undo()" />
+        <app-whiteboard-redo (onRedo)="redo()" />
+        <app-whiteboard-save-to-db [disabled]="!isLoggedIn" (onSaveToDB)="SaveToDB()" />
+        <span *ngIf="!isLoggedIn && !isHandset" [style.color]="'#fff'"> Warning: login to save your board </span>
       </div>
-    </div>
-    <div id="menu_bar" class="active">
-      <app-whiteboard-new-document (onNewDocument)="newDocument()" />
-      <app-whiteboard-save-as-menu (onSaveAs)="saveAs($event)" />
-      <app-whiteboard-add-image (onImageAdd)="addImage($event)" />
-      <app-whiteboard-undo (onUndo)="undo()" />
-      <app-whiteboard-redo (onRedo)="redo()" />
-      <app-whiteboard-save-to-db [disabled]="!isLoggedIn" (onSaveToDB)="SaveToDB()" />
-      <span *ngIf="!isLoggedIn" [style.color]="'#fff'"> Warning: login to save your board </span>
-    </div>
-    <div id="tools_left" class="tools_panel">
-      <app-whitebord-button-tool
-        [selectedTool]="selectedTool"
-        (onToolSelectionChanged)="toolSelectionChanged($event)"
-      />
-      <app-whiteboard-brush-tool
-        [selectedTool]="selectedTool"
-        (onToolSelectionChanged)="toolSelectionChanged($event)"
-      />
-      <app-whiteboard-image-tool
-        [selectedTool]="selectedTool"
-        (onToolSelectionChanged)="toolSelectionChanged($event)"
-      />
-      <app-whiteboard-line-tool
-        [selectedTool]="selectedTool"
-        (onToolSelectionChanged)="toolSelectionChanged($event)"
-      />
-      <app-whiteboard-rect-tool
-        [selectedTool]="selectedTool"
-        (onToolSelectionChanged)="toolSelectionChanged($event)"
-      />
-      <app-whiteboard-ellipse-tool
-        [selectedTool]="selectedTool"
-        (onToolSelectionChanged)="toolSelectionChanged($event)"
-      />
-      <app-whiteboard-text-tool
-        [selectedTool]="selectedTool"
-        (onToolSelectionChanged)="toolSelectionChanged($event)"
-      />
-      <app-whiteboard-eraser-tool
-        [selectedTool]="selectedTool"
-        (onToolSelectionChanged)="toolSelectionChanged($event)"
-      />
-      <app-whiteboard-color-tool
-        (onColorChange)="colorChange($event.type, $event.event)"
-        (onSwapColors)="swapColors()"
-      /> 
-    </div>
-    <div id="tools_bottom" class="tools_panel">
-      <app-whiteboard-zoom-panel [zoom]="zoom" (onZoom)="setZoom($event)" />
+      <div class="canvas-and-tools" [ngClass]="{horizontal: isHandset}">
+        <div>
+          <h3 class="toolbar-title" *ngIf="isHandset">
+            Toolbar
+          </h3>
+          <div id="tools_left" class="tools_panel" [ngClass]="{horizontal:isHandset}">
+            <app-whitebord-button-tool
+              [selectedTool]="selectedTool"
+              (onToolSelectionChanged)="toolSelectionChanged($event)"
+            />
+            <app-whiteboard-brush-tool
+              [selectedTool]="selectedTool"
+              (onToolSelectionChanged)="toolSelectionChanged($event)"
+            />
+            <app-whiteboard-image-tool
+              [selectedTool]="selectedTool"
+              (onToolSelectionChanged)="toolSelectionChanged($event)"
+            />
+            <app-whiteboard-line-tool
+              [selectedTool]="selectedTool"
+              (onToolSelectionChanged)="toolSelectionChanged($event)"
+            />
+            <app-whiteboard-rect-tool
+              [selectedTool]="selectedTool"
+              (onToolSelectionChanged)="toolSelectionChanged($event)"
+            />
+            <app-whiteboard-ellipse-tool
+              [selectedTool]="selectedTool"
+              (onToolSelectionChanged)="toolSelectionChanged($event)"
+            />
+            <app-whiteboard-text-tool
+              [selectedTool]="selectedTool"
+              (onToolSelectionChanged)="toolSelectionChanged($event)"
+            />
+            <app-whiteboard-eraser-tool
+              [selectedTool]="selectedTool"
+              (onToolSelectionChanged)="toolSelectionChanged($event)"
+            />
+            <app-whiteboard-color-tool
+              (onColorChange)="colorChange($event.type, $event.event)"
+              (onSwapColors)="swapColors()"
+            /> 
+          </div>
+        </div>
+
+        <div id="svgcanvas">
+          <ng-whiteboard
+            #whiteboard
+            [selectedTool]="selectedTool"
+            [options]="options"
+            (selectElement)="setSelectedElement($event)"
+            (save)="onSave($event)"
+            [strokeWidth]="options.strokeWidth"
+            (toolChanged)="selectedTool = $event"
+            [zoom]="zoom"
+            [canvasHeight]="options.canvasHeight"
+            [canvasWidth]="options.canvasWidth"
+            [center]="true"
+            [fullScreen]="false"
+            [strokeColor]="options.strokeColor"
+            [fill]="options.fill"
+            [backgroundColor]="options.backgroundColor"
+            (selectElement)="dataChanged()"
+            (undo)="dataChanged()"
+            (redo)="dataChanged()"
+            (click)="dataChanged()"
+            (drag)="dataChanged()"
+            (drop)="dataChanged()"
+            (drag)="dataChanged()"
+          >
+          </ng-whiteboard>
+        </div>
+
+      </div>
+
+      </div>
+
+    <div id="tools_bottom" [ngClass]="{handset:isHandset}" class="tools_panel">
+      <app-whiteboard-zoom-panel [isHandset]="isHandset" [zoom]="zoom" (onZoom)="setZoom($event)" />
     </div>
   </div>
 </div>

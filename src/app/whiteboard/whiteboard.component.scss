@@ -120,7 +120,12 @@ button.cancel {
 
 #tools_bottom {
   position: absolute;
-  left: var(--x12);
+  &:not(.handset){
+    left: var(--x12);
+  }
+  &.handset{
+    left:1rem;
+  }
   right: 0;
   bottom: 0;
   height: var(--x10);
@@ -428,6 +433,9 @@ button.cancel {
   z-index: 2;
   height: var(--x8);
   display: flex;
+  &.horizontal{
+    padding-left:0;
+  }
 }
 
 #menu_bar .menu:hover .menu_list {
@@ -731,18 +739,11 @@ button.cancel {
 
 #svgcanvas {
   background-color: var(--z2);
-  display: block;
   width: 100%;
-  height: 100%;
+  height: 90%;
 }
 
 #workarea {
-  display: block;
-  position: absolute;
-  top: var(--x8);
-  left: var(--x12);
-  bottom: var(--x10);
-  right: calc(var(--panel-width) + var(--x4));
   background-color: var(--z2);
   overflow: auto;
   align-items: center;
@@ -750,16 +751,39 @@ button.cancel {
   transition: transform 500ms cubic-bezier(0.13, 0.66, 0.24, 0.92);
   border-radius: var(--x2);
   box-shadow: var(--shadow-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: self-start;
+}
+.canvas-and-tools{
+  display:flex;
+  width: 92%;
+  height: 100vh;
+  justify-content: self-start;
+  &.horizontal{
+    flex-direction: column;
+    width:100%;
+  }
 }
 
 #tools_left {
-  position: absolute;
+  &:not(.horizontal){
+    position:absolute;
+  }
   border-right: none;
   width: var(--x12);
   top: var(--x8);
   bottom: 0;
   left: 0;
   z-index: 4;
+
+  overflow: auto;
+  &.horizontal{
+    width:100%;
+    display:flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
 }
 
 .tool_button {
@@ -1015,7 +1039,9 @@ button.cancel {
 #zoom_panel,
 #zoom_select {
   padding: var(--x2) 0;
-  right: calc(var(--panel-width) + var(--x2));
+  &:not(.handset){
+    right: calc(var(--panel-width) + var(--x2));
+  }
   position: absolute;
   cursor: pointer;
   width: 100px;
@@ -1091,4 +1117,12 @@ button.cancel {
 #zoom_label span {
   top: 0;
   left: 0;
+}
+.menubar-title,.toolbar-title{
+  color:#fff;
+  position:relative;
+  padding:0.5rem 1rem;
+}
+.toolbar-title{
+  padding:0 1rem;
 }

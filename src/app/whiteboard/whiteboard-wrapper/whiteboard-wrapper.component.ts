@@ -14,6 +14,7 @@ import { LoginComponent } from "../../login/login.component";
 import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import * as Sentry from '@sentry/angular'
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-whiteboard-wrapper',
@@ -42,6 +43,7 @@ export class WhiteboardWrapperComponent {
   protected faChevronLeft = faChevronLeft
   protected enableGoToBoards:boolean;
   protected isLoggedIn:boolean;
+  protected isHandset:boolean;
   private toaster = inject(ToastrService)
   app: FirebaseApp;
   auth: Auth;
@@ -49,7 +51,7 @@ export class WhiteboardWrapperComponent {
   get collabURL():string{
     return location.href?.substring(0,20) + '...'
   }
-  constructor(private sharedService: SharedService, private router:Router){
+  constructor(private sharedService: SharedService, private breakpointObserver:BreakpointObserver){
     Sentry.captureFeedback({ message: "I really like your App, thanks!" },
       {
         captureContext: {
@@ -73,6 +75,10 @@ export class WhiteboardWrapperComponent {
     })
     this.sharedService.hasWhiteBoardLoaded$().subscribe(loaded =>{
       this.enableGoToBoards = loaded;
+    });
+    this.breakpointObserver.observe( Breakpoints.Handset ).subscribe(({matches})=>{
+      this.isHandset = matches;
+      this.sharedService.setIsHandset(matches);
     })
   }
   public logout():void{

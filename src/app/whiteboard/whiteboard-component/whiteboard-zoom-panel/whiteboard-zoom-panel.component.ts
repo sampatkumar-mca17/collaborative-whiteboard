@@ -14,6 +14,7 @@ import { WHITEBOARD_ZOOM, WHITEBOARD_ZOOM_OPTIONS } from '../../white-board.cons
 export class WhiteboardZoomPanelComponent {
   whiteBoardZoomOptions = WHITEBOARD_ZOOM_OPTIONS;
   @Input() zoom:number;
+  @Input() isHandset:boolean;
   @Output() onZoom:EventEmitter<string | number> = new EventEmitter();
   setZoom(zoomSelectValue:string | number){
     this.onZoom.emit(zoomSelectValue)

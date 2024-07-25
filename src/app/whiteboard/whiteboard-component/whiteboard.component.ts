@@ -31,6 +31,7 @@ import { WhiteboardColorToolComponent } from './whiteboard-color-tool/whiteboard
 import { WhiteboardZoomPanelComponent } from './whiteboard-zoom-panel/whiteboard-zoom-panel.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-whiteboard-component',
@@ -85,6 +86,7 @@ export class WhiteBoardComponent implements OnInit {
   boardID: string;
   boardLoading: boolean;
   base64Img: string;
+  isHandset:boolean;
 
   constructor(
     private _whiteboardService: NgWhiteboardService,
@@ -93,7 +95,8 @@ export class WhiteBoardComponent implements OnInit {
     private dialog:MatDialog,
     private toaster:ToastrService,
     private router:Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private breakpointObserver:BreakpointObserver
   ) {}
   /**------------------------------------ Public Methods Start Here ----------------------------------------- */
 
@@ -128,6 +131,9 @@ export class WhiteBoardComponent implements OnInit {
       this.isLoggedIn = !!loggedIn;
     })
     this.checkForMode();
+    this.sharedService.getIsHandset().subscribe(isHandset =>{
+      this.isHandset = isHandset;
+    });
   }
 
   /**

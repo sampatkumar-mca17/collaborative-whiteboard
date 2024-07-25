@@ -1,35 +1,55 @@
 <div class="whiteboard-container">
-  <mat-toolbar class="toolbar">
+  <mat-toolbar class="toolbar" [ngClass]="{handset:isHandset}">
+
     <div class="header-title" style="display:flex; align-items: center; gap:0.5rem">
+      @if (isHandset && enableGoToBoards) {
+        <div class="mobile-action">
+            <fa-icon [icon]="faChevronLeft" [routerLink]="'/whiteboard/dashboard'"/>
+        </div>
+      }
+
       @if (userData?.photoURL) {
         <img width="50" height="50" style="border-radius: 50%;" src="" alt="" [srcset]="userData.photoURL">
       }
       <span>Whiteboard</span>
     </div>
 
-    <div class="actions">
-      @if(enableGoToBoards){
+    <div class="actions" [ngClass]="{handset:isHandset}">
+      @if(enableGoToBoards && !isHandset){
         <button mat-button aria-label="Example icon-button with heart icon" [routerLink]="'/whiteboard/dashboard'">
           <fa-icon [icon]="faChevronLeft"/>
           Go To Boards
         </button>
       }
       @if (enableGoToBoards) {
-        <button [mat-menu-trigger-for]="collabMenu" mat-button aria-label="Example icon-button with heart icon">
-          <fa-icon [icon]="faHandshake"/>
-          Remote Collaboration
-        </button>
+        @if(!isHandset){
+          <button mat-button [mat-menu-trigger-for]="collabMenu" aria-label="Example icon-button with heart icon">
+            <fa-icon [icon]="faHandshake"/>
+              <span>Remote Collaboration</span>
+          </button>
+        }
+        @else {
+            <fa-icon [mat-menu-trigger-for]="collabMenu" [icon]="faHandshake"/>
+        }
       }
       @if (!isLoggedIn) {
-        <button mat-button [mat-menu-trigger-for]="loginMenu" aria-label="Example icon-button with heart icon">
-          <fa-icon [icon]="faSignIn"/>
-          Login
-        </button>
+          <button mat-button [mat-menu-trigger-for]="loginMenu" aria-label="Example icon-button with heart icon">
+            <fa-icon [icon]="faSignIn"/>
+              @if (!isHandset) {
+                <span>
+                  Login
+                </span>
+              }
+          </button>
       }
       @else {
         <button mat-button aria-label="Example icon-button with heart icon" (click)="logout()">
           <fa-icon [icon]="faSignOut"/>
-          Logout
+          @if (!isHandset) {
+            <span>
+              Logout
+            </span>
+          }
         </button>
       }
     </div>

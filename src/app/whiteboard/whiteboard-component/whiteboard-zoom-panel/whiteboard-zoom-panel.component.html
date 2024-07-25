@@ -1,5 +1,5 @@
       <!-- Zoom buttons -->
-      <select #zoomSelect id="zoom_select" (change)="setZoom(zoomSelect.value)">
+      <select #zoomSelect [ngClass]="{handset:isHandset}" id="zoom_select" (change)="setZoom(zoomSelect.value)">
         <option
           *ngFor="let zoomOption of whiteBoardZoomOptions"
           [value]="zoomOption"
@@ -8,7 +8,7 @@
           {{ zoomOption + "%" }}
         </option>
       </select>
-      <div id="zoom_panel" class="toolset" title="Change zoom level">
+      <div id="zoom_panel" [ngClass]="{handset:isHandset}" class="toolset" title="Change zoom level">
         <div class="select-input" id="zoom_label">
           <span id="zoomLabel" class="zoom_tool icon_label">
             <svg

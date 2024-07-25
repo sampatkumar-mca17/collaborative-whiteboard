@@ -13,6 +13,7 @@ export class SharedService {
   private isLoggedInSubject: BehaviorSubject<User> = new BehaviorSubject<User>(null);
   private isWhiteBoardComponentLoadedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private isNewBoardSubject: Subject<boolean> = new Subject<boolean>();
+  private isHandsetSubject:BehaviorSubject<boolean>= new BehaviorSubject(false);
   constructor(private app: FirebaseApp, private auth: Auth, private fireStore:Firestore){
     this.auth.onAuthStateChanged((stateChanged)=>{
       this.isLoggedInSubject.next(stateChanged)
@@ -43,5 +44,11 @@ export class SharedService {
   }
   public isNewBoard():Observable<boolean>{
     return this.isNewBoardSubject.asObservable();
+  }
+  public setIsHandset(isHandset:boolean):void{
+    this.isHandsetSubject.next(isHandset)
+  }
+  public getIsHandset():Observable<boolean>{
+    return this.isHandsetSubject.asObservable();
   }
 }
