@@ -42,6 +42,7 @@
     "ng-whiteboard": "^3.0.4",
     "ngx-colors": "^3.5.3",
     "ngx-toastr": "^18.0.0",
+    "perfect-freehand": "^1.2.2",
     "process": "^0.11.10",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
