@@ -1,5 +1,8 @@
 <div class="whiteboard-container">
-  <div class="editor">
+  @if (boardLoading) {
+    <mat-spinner class="loader" [diameter]="50"></mat-spinner>
+  }
+  <div class="editor" [ngClass]="{hide:boardLoading}" >
     <div
       #workarea
       id="workarea"

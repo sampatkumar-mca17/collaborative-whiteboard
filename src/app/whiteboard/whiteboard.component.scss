@@ -20,6 +20,9 @@
   user-select: none;
   margin: 0;
   padding: 0.5rem 0 0.5rem 0;
+  &.hide{
+    visibility: hidden;
+  }
 }
 
 ::selection {
@@ -130,6 +133,12 @@ button.cancel {
   bottom: 0;
   height: var(--x10);
   overflow: visible;
+}
+
+.loader{
+  position: absolute;
+  left: 50%;
+  top: 40%;
 }
 
 /* For modern browsers */
@@ -809,7 +818,7 @@ button.cancel {
 
 .tool_button svg {
   vertical-align: center;
-  fill: var(--z5);
+  fill: #fff;
 }
 
 .tool_button.active svg {

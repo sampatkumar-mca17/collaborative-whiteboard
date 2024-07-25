@@ -30,8 +30,8 @@ import { WhiteboardEraserToolComponent } from './whiteboard-eraser-tool/whiteboa
 import { WhiteboardColorToolComponent } from './whiteboard-color-tool/whiteboard-color-tool.component';
 import { WhiteboardZoomPanelComponent } from './whiteboard-zoom-panel/whiteboard-zoom-panel.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-whiteboard-component',
@@ -59,7 +59,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
     WhiteboardTextToolComponent,
     WhiteboardEraserToolComponent,
     WhiteboardColorToolComponent,
-    WhiteboardZoomPanelComponent
+    WhiteboardZoomPanelComponent,
+    MatProgressSpinnerModule
 ],
   providers: [NgWhiteboardService],
   encapsulation: ViewEncapsulation.ShadowDom,
@@ -329,6 +330,7 @@ export class WhiteBoardComponent implements OnInit {
    */
   private async saveToFirestore(name?:string):Promise<void>{
     this.saveAs(FormatType.Base64);
+    this.boardLoading = true
     setTimeout(() => {
       if(this.boardID){
         this.editDoc();
@@ -348,6 +350,7 @@ export class WhiteBoardComponent implements OnInit {
       id: id,
       boardBase64:this.base64Img
     }).then((_)=>{
+      this.boardLoading = false;
       this.boardID = _.id;
       this.router.navigate(['/whiteboard/board/'+this.boardID]);
       this.initializeFluidService();
@@ -360,6 +363,7 @@ export class WhiteBoardComponent implements OnInit {
       board: JSON.stringify(this.whiteboard.data),
       boardBase64:this.base64Img
     }).then(_ => {
+      this.boardLoading = false;
       this.toaster.success('Board updated successfully', 'Success');
     })
   }
