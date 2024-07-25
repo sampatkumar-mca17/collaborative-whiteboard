@@ -83,7 +83,7 @@ export class WhiteboardWrapperComponent {
   public copyCollabURL():void{
     const cb = navigator.clipboard;
     if (cb) {
-      cb.writeText(new URL(location.href).host+'/whiteboard/board'+location.hash??'');
+      cb.writeText(new URL(location.href).host+'/whiteboard/board'+location.hash);
       this.toaster.success('URL copied.. Share it with your friend and enjoy collaboration!')
     }
   }
