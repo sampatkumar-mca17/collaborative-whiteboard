@@ -8,7 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-whiteboard-component',
   templateUrl: './whiteboard.component.html',
-  styleUrls: ['../whiteboard.component.scss'],
+  styleUrls: ['./whiteboard.component.scss'],
   standalone:true,
   imports: [
     CommonModule,

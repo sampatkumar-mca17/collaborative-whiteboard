@@ -82,6 +82,7 @@ export class WhiteboardWrapperComponent {
   }
 
   private getBoardsPickerConfiguration(boardContainer?:ElementRef<HTMLElement>):MiroBoardPickerConfig{
+    console.log(process?.env)
    const config:MiroBoardPickerConfig =  {
       clientId: process?.env?.['client_id']  ,
       action: 'access-link',
