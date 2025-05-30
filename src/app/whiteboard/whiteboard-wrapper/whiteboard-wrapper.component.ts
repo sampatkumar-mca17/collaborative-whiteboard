@@ -83,7 +83,7 @@ export class WhiteboardWrapperComponent {
 
   private getBoardsPickerConfiguration(boardContainer?:ElementRef<HTMLElement>):MiroBoardPickerConfig{
    const config:MiroBoardPickerConfig =  {
-      clientId: '3458764630225075208',
+      clientId: process?.env?.['client_id']  ,
       action: 'access-link',
       allowCreateAnonymousBoards: false,
       success: this.boardSelectionSuccess,

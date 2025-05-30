@@ -13,7 +13,7 @@ export class WhiteboardService {
   getMiroBoardID():Observable<MiroBoard>{
     return this.http.get<MiroBoard>('https://api.miro.com/v2/boards',{
       headers:{
-        authorization:'Bearer eyJtaXJvLm9yaWdpbiI6ImV1MDEifQ_9kUO4Fx324uchD7NpdNnadQY95Q'
+        authorization:`Bearer ${process?.env?.['bearer_token']}`
       }
     })
   }
