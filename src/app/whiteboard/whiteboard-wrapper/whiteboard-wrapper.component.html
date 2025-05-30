@@ -1,76 +1,31 @@
 <div class="whiteboard-container">
-  <mat-toolbar class="toolbar" [ngClass]="{handset:isHandset}">
+  <mat-toolbar  class="toolbar" [ngClass]="{handset:isHandset}">
+    <mat-toolbar-row>
 
-    <div class="header-title" style="display:flex; align-items: center; gap:0.5rem">
-      @if (isHandset && enableGoToBoards) {
-        <div class="mobile-action">
-            <fa-icon [icon]="faChevronLeft" [routerLink]="'/whiteboard/dashboard'"/>
-        </div>
-      }
+    <div class="header-title" style="display:flex; align-items: center; justify-content: space-between; width:100%; gap:0.5rem">
       <div class="title">
         <img width="50" height="50" src="assets/title.png">
          <span>Whiteboard</span>
       </div>
-
-    </div>
-
-    <div class="actions" [ngClass]="{handset:isHandset}">
-      @if(enableGoToBoards && !isHandset){
-        <button mat-button aria-label="Example icon-button with heart icon" [routerLink]="'/whiteboard/dashboard'">
-          <fa-icon [icon]="faChevronLeft"/>
-          Go To Boards
-        </button>
-      }
-      @if (enableGoToBoards) {
-        @if(!isHandset){
-          <button mat-button [mat-menu-trigger-for]="collabMenu" aria-label="Example icon-button with heart icon">
-            <fa-icon [icon]="faHandshake"/>
-              <span>Remote Collaboration</span>
+      @if(microBoardUrl){
+        <div class="actions">
+          <button mat-button (click)="openBoardsPicker()">
+           View All Boards
+           <fa-icon [icon]="faExpand"></fa-icon>
           </button>
-        }
-        @else {
-            <fa-icon [mat-menu-trigger-for]="collabMenu" [icon]="faHandshake"/>
-        }
+         </div>
       }
-      @if (!isLoggedIn) {
-          <button mat-button [mat-menu-trigger-for]="loginMenu" aria-label="Example icon-button with heart icon">
-            <fa-icon [icon]="faSignIn"/>
-              @if (!isHandset) {
-                <span>
-                  Login
-                </span>
-              }
-          </button>
-      }
-      @else {
-        <button mat-icon-button [mat-menu-trigger-for]="logoutMenu" aria-label="Example icon-button with heart icon">
-          <img width="50" height="50" style="border-radius: 50%;" src="" alt="" [srcset]="userData.photoURL">
-        </button>
-      }
+ 
     </div>
+    </mat-toolbar-row>
   </mat-toolbar>
-  <router-outlet/>
+  @if(microBoardUrl){
+    <router-outlet/>
+  }
+  @else {
+    <div #boardContainer class="no-board">
+      <!-- <button mat-stroked-button size="large" (click)="openBoardsPicker()">Choose your board</button> -->
+    </div>  
+  }
 </div>
 
-
-<mat-menu #collabMenu>
-  <div class="collab-menu">
-    <span class="head">Invite a friend</span>
-    <span (click)="copyCollabURL()" mat-menu-item >
-      <span>{{collabURL}}</span>
-      <fa-icon [icon]="faCopy"></fa-icon>
-    </span>
-  </div>
-</mat-menu>
-
-<mat-menu #loginMenu>
-  <div class="collab-menu">
-    <app-login/>
-  </div>
-</mat-menu>
-
-<mat-menu #logoutMenu>
-  <div class="collab-menu">
-    <app-login [logout]="true"/>
-  </div>
-</mat-menu>

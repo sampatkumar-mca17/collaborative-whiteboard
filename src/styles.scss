@@ -2,11 +2,13 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
+@use '@angular/material/prebuilt-themes/indigo-pink.css';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
+@include mat.core();
 @include mat.elevation-classes();
 @include mat.app-background();
 // my fonts
@@ -20,18 +22,14 @@
   src: url('assets/Colfax-Medium.otf');
 }
 
-@import 'ngx-toastr/toastr';
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
+
+// Since we're using a prebuilt theme, we don't need to define palettes
+// If you want to customize the theme later, you can uncomment and modify these:
+/*
 $collaborative-whiteboard-primary: mat.define-palette(mat.$indigo-palette);
 $collaborative-whiteboard-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
 $collaborative-whiteboard-warn: mat.define-palette(mat.$red-palette);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
 $collaborative-whiteboard-theme: mat.define-light-theme((
   color: (
     primary: $collaborative-whiteboard-primary,

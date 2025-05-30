@@ -21,12 +21,15 @@
     }
   }
 }
-.collab-menu{
-  display:flex;
-  flex-direction: column;
+.no-board{
+  display: flex;
+  height: calc(100vh - 65px);
+  width: 100%;
   align-items: center;
-  & .head{
-    font-weight: bold;
+  justify-content: center;
+  text-align: center;
+  & button{
+    font-size:20px;
   }
 }
 
