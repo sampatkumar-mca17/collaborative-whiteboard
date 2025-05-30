@@ -1,6 +1,6 @@
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSignIn, faChevronLeft, faExpandAlt } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +11,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { SafeResourceUrl, DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MiroBoardPickerConfig, StatusChecker } from '../whiteboard-component/model/whiteboard.model';
 import { GatewayService } from '../../services/gateway.service';
-import { map, Observable } from 'rxjs';
+import { map, Observable, Subject, takeUntil } from 'rxjs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
 declare var miroBoardsPicker:any;
 @Component({
@@ -34,101 +34,48 @@ export class WhiteboardWrapperComponent {
   protected faChevronLeft = faChevronLeft
   protected isHandset:boolean;
   protected faExpand = faExpandAlt
-  protected microBoardUrl:SafeResourceUrl;
   microBoardStatusChecker: StatusChecker<SafeResourceUrl>;
   resizedIframe: any;
-  clientId: string;
-  get collabURL():string{
-    return location.href?.substring(0,20) + '...'
-  }
+  loadingClientIdDetails:boolean;
+  destroy$:Subject<void> = new Subject<void>();
   @ViewChild('boardContainer',{static:false}) boardContainer:ElementRef<HTMLDivElement>;
-  constructor(private sharedService: SharedService, private gateway:GatewayService, private breakpointObserver:BreakpointObserver,private domSanitizer:DomSanitizer){
+  miroBoardStatus$: Observable<StatusChecker<SafeUrl>>;
+  constructor(private sharedService: SharedService, private gateway:GatewayService, private breakpointObserver:BreakpointObserver,private router:Router){
 
   }
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.observeBreakpoints();
-    this.gateway.getCredentials().pipe(map((credentials)=>credentials)).subscribe((credentials)=>{
-     this.clientId = credentials.clientId
+    this.getClientId();
+    this.miroBoardStatus$ = this.sharedService.microBoardStatusChange().pipe(takeUntil(this.destroy$))
+   
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  openBoardsPicker(){
+    this.sharedService.openBoardsPicker();
+  }
+  private getClientId(){
+    this.loadingClientIdDetails = true;
+    this.gateway.getCredentials().pipe(
+      map((credentials)=>credentials),
+      takeUntil(this.destroy$)
+    ).subscribe((credentials)=>{
+      this.sharedService.setClientId(credentials.clientId);
+      this.loadingClientIdDetails = false;
+      this.router.navigate(['/whiteboard/whiteboard-picker'])
     });
   }
-
-  ngAfterViewChecked(): void {
-   this.handleOpenBoardsPickerEnabling();
-  }
-  openBoardsPicker(boardContainer?:ElementRef<HTMLElement>){
-    this.microBoardStatusChecker = this.initializeStatusCheckerData();
-    this.microBoardStatusChecker.fetching = true;
-    this.sharedService.setMicroBoardStatus(this.microBoardStatusChecker);
-    miroBoardsPicker.open(this.getBoardsPickerConfiguration(boardContainer));
-  }
-
   private observeBreakpoints(){
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe((result)=>{
       this.isHandset = result.matches;
     })
   }
 
-  private handleOpenBoardsPickerEnabling(){
-    if(!this.boardContainer?.nativeElement?.children?.length && this.resizedIframe){
-      this.resizedIframe = false;
-      return;
-    }
-    if(this.boardContainer && !this.resizedIframe){
-      this.resizedIframe = true;
-      this.openBoardsPicker(this.boardContainer);
-      setTimeout(()=>{
-        this.resizeBoardPickerIframe();
-      },0)
-    }
-  }
 
-  private resizeBoardPickerIframe(){
-    const firstChild = this.boardContainer.nativeElement.children?.[0]
-    if(firstChild?.tagName === 'IFRAME'){
-      firstChild.setAttribute('width','100%')
-      firstChild.setAttribute('height','100%')
-    }
-  }
-
-  private getBoardsPickerConfiguration(boardContainer?:ElementRef<HTMLElement>):MiroBoardPickerConfig{
-   const config:MiroBoardPickerConfig =  {
-      clientId: this.clientId,
-      action: 'access-link',
-      allowCreateAnonymousBoards: false,
-      success: this.boardSelectionSuccess,
-      error: this.boardSelectionError
-    };
-    (boardContainer && (config.iframeContainer = boardContainer.nativeElement))
-    return config;
-  }
-  private boardSelectionSuccess = (result:any) => {
-    this.microBoardUrl = this.bypassSecurity(result?.viewLink);
-    this.microBoardStatusChecker.data = this.microBoardUrl;
-    this.microBoardStatusChecker.success = true;
-    this.microBoardStatusChecker.fetching = false;
-    this.microBoardStatusChecker.fetchingComplete = true;
-    this.sharedService.setMicroBoardStatus(this.microBoardStatusChecker);
-  }
-
-  private boardSelectionError =  (error:any) => {
-    this.microBoardStatusChecker.fetching = false;
-    this.microBoardStatusChecker.success = false;
-    this.microBoardStatusChecker.fetchingComplete = true;
-    this.sharedService.setMicroBoardStatus(this.microBoardStatusChecker);
-  }
-
- private bypassSecurity(url:string){
-    return this.domSanitizer.bypassSecurityTrustResourceUrl(url)
-  }
-
-  private initializeStatusCheckerData():StatusChecker<SafeUrl>{
-    return {
-      fetching:false,
-      success:false,
-      data:null,
-      fetchingComplete:false
-    }
-  }
 }

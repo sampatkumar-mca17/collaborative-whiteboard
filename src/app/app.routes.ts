@@ -13,10 +13,9 @@ export const routes: Routes = [
         canActivate:[whiteboardActivateGuard]
       },
       {
-        path:'',
-        redirectTo:'board',
-        pathMatch:'full'
-      }
+        path:'whiteboard-picker',
+        loadComponent:() => import('./whiteboard/whiteboard-picker/whiteboard-picker.component').then((c)=> c.WhiteboardPickerComponent)
+      },
     ]
   },
   {

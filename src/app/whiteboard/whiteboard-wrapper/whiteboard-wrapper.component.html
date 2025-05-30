@@ -7,29 +7,23 @@
         <img width="50" height="50" src="assets/title.png">
          <span>Whiteboard</span>
       </div>
-      @if(microBoardUrl){
+
         <div class="actions">
-          <button mat-button (click)="openBoardsPicker()">
+          <button [disabled]="!(miroBoardStatus$ | async)?.fetchingComplete" mat-button (click)="openBoardsPicker()">
            View All Boards
            <fa-icon [icon]="faExpand"></fa-icon>
           </button>
          </div>
-      }
  
     </div>
     </mat-toolbar-row>
   </mat-toolbar>
-  @if(microBoardUrl){
-    <router-outlet/>
-  }
-  @else if(clientId) {
-    <div #boardContainer class="no-board">
-    </div>  
-  }
-  @else{
+  @if(loadingClientIdDetails){
     <div class="loader">  
       <mat-spinner ></mat-spinner>
     </div>
   }
-</div>
+  @else {
+    <router-outlet/>
+  }
 

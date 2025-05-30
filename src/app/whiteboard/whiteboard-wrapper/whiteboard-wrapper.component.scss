@@ -21,17 +21,7 @@
     }
   }
 }
-.no-board{
-  display: flex;
-  height: calc(100vh - 65px);
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  & button{
-    font-size:20px;
-  }
-}
+
 
 .actions.handset{
   display: flex;
