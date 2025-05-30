@@ -42,6 +42,15 @@ export class SharedService {
     this.setMicroBoardStatus(this.miroBoardStatusChecker);
     miroBoardsPicker.open(this.getBoardsPickerConfiguration(boardContainer));
   }
+
+  initializeStatusCheckerData():void{
+    this.miroBoardStatusChecker = {
+      fetching:false,
+      success:false,
+      data:null,
+      fetchingComplete:false
+    }
+  }
   private getBoardsPickerConfiguration(boardContainer?:ElementRef<HTMLElement>):MiroBoardPickerConfig{
     this.miroBoardStatusChecker.fetching = true;
     this.miroBoardStatusChecker.fetchingComplete = false;
@@ -83,12 +92,5 @@ export class SharedService {
      return this.domSanitizer.bypassSecurityTrustResourceUrl(url)
    }
  
-   private initializeStatusCheckerData():StatusChecker<SafeUrl>{
-     return {
-       fetching:false,
-       success:false,
-       data:null,
-       fetchingComplete:false
-     }
-   }
+
 }
