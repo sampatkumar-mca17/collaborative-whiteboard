@@ -39,3 +39,11 @@
   position: absolute;
   right: 0rem;
 }
+
+.loader{
+  width:100vw;
+  height: calc(100vh - 65px);
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}

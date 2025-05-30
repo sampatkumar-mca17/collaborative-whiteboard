@@ -22,10 +22,14 @@
   @if(microBoardUrl){
     <router-outlet/>
   }
-  @else {
+  @else if(clientId$ | async) {
     <div #boardContainer class="no-board">
-      <!-- <button mat-stroked-button size="large" (click)="openBoardsPicker()">Choose your board</button> -->
     </div>  
+  }
+  @else{
+    <div class="loader">  
+      <mat-spinner ></mat-spinner>
+    </div>
   }
 </div>
 

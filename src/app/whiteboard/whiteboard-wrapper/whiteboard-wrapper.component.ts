@@ -10,7 +10,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { SafeResourceUrl, DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MiroBoardPickerConfig, StatusChecker } from '../whiteboard-component/model/whiteboard.model';
-
+import { GatewayService } from '../../services/gateway.service';
+import { map, Observable } from 'rxjs';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
 declare var miroBoardsPicker:any;
 @Component({
   selector: 'app-whiteboard-wrapper',
@@ -22,6 +24,7 @@ declare var miroBoardsPicker:any;
     MatButtonModule,
     FontAwesomeModule,
     MatTooltipModule,
+    MatProgressSpinnerModule
 ],
   templateUrl: './whiteboard-wrapper.component.html',
   styleUrl: './whiteboard-wrapper.component.scss'
@@ -34,24 +37,26 @@ export class WhiteboardWrapperComponent {
   protected microBoardUrl:SafeResourceUrl;
   microBoardStatusChecker: StatusChecker<SafeResourceUrl>;
   resizedIframe: any;
+  clientId$: Observable<{clientId:string,bearerToken:string}>;
   get collabURL():string{
     return location.href?.substring(0,20) + '...'
   }
   @ViewChild('boardContainer',{static:false}) boardContainer:ElementRef<HTMLDivElement>;
-  constructor(private sharedService: SharedService, private breakpointObserver:BreakpointObserver,private domSanitizer:DomSanitizer){
+  constructor(private sharedService: SharedService, private gateway:GatewayService, private breakpointObserver:BreakpointObserver,private domSanitizer:DomSanitizer){
 
   }
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.observeBreakpoints();
-  }
-  ngAfterViewInit(): void {
-    this.openBoardsPicker(this.boardContainer);
+    this.clientId$ = this.gateway.getCredentials().pipe(map((credentials)=>credentials));
+    this.clientId$.subscribe((credentials)=>{
+      console.log(credentials);
+    })
   }
 
   ngAfterViewChecked(): void {
-   this.resizeBoardPickerIframe();
+   this.handleOpenBoardsPickerEnabling();
   }
   openBoardsPicker(boardContainer?:ElementRef<HTMLElement>){
     this.microBoardStatusChecker = this.initializeStatusCheckerData();
@@ -66,18 +71,23 @@ export class WhiteboardWrapperComponent {
     })
   }
 
-  private resizeBoardPickerIframe(){
+  private handleOpenBoardsPickerEnabling(){
     if(!this.boardContainer?.nativeElement?.children?.length && this.resizedIframe){
       this.resizedIframe = false;
       return;
     }
     if(this.boardContainer && !this.resizedIframe){
       this.resizedIframe = true;
-      const firstChild = this.boardContainer.nativeElement.children?.[0]
-      if(firstChild?.tagName === 'IFRAME'){
-        firstChild.setAttribute('width','100%')
-        firstChild.setAttribute('height','100%')
-      }
+      this.resizeBoardPickerIframe();
+      this.openBoardsPicker(this.boardContainer);
+    }
+  }
+
+  private resizeBoardPickerIframe(){
+    const firstChild = this.boardContainer.nativeElement.children?.[0]
+    if(firstChild?.tagName === 'IFRAME'){
+      firstChild.setAttribute('width','100%')
+      firstChild.setAttribute('height','100%')
     }
   }
 
