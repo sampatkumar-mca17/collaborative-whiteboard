@@ -80,7 +80,7 @@ export class WhiteboardWrapperComponent {
       this.openBoardsPicker(this.boardContainer);
       setTimeout(()=>{
         this.resizeBoardPickerIframe();
-      },100)
+      },0)
     }
   }
 
