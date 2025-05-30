@@ -78,7 +78,9 @@ export class WhiteboardWrapperComponent {
     if(this.boardContainer && !this.resizedIframe){
       this.resizedIframe = true;
       this.resizeBoardPickerIframe();
-      this.openBoardsPicker(this.boardContainer);
+      setTimeout(()=>{
+        this.openBoardsPicker(this.boardContainer);
+      },100)
     }
   }
 
