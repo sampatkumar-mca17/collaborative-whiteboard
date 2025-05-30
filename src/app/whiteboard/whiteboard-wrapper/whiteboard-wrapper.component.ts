@@ -58,7 +58,7 @@ export class WhiteboardWrapperComponent {
   }
 
   openBoardsPicker(){
-    this.sharedService.openBoardsPicker();
+   this.router.navigate(['/whiteboard/whiteboard-picker']);
   }
   private getClientId(){
     this.loadingClientIdDetails = true;
