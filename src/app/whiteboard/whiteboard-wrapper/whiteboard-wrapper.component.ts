@@ -37,7 +37,7 @@ export class WhiteboardWrapperComponent {
   protected microBoardUrl:SafeResourceUrl;
   microBoardStatusChecker: StatusChecker<SafeResourceUrl>;
   resizedIframe: any;
-  clientId$: Observable<{clientId:string,bearerToken:string}>;
+  clientId: string;
   get collabURL():string{
     return location.href?.substring(0,20) + '...'
   }
@@ -49,10 +49,9 @@ export class WhiteboardWrapperComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.observeBreakpoints();
-    this.clientId$ = this.gateway.getCredentials().pipe(map((credentials)=>credentials));
-    this.clientId$.subscribe((credentials)=>{
-      console.log(credentials);
-    })
+    this.gateway.getCredentials().pipe(map((credentials)=>credentials)).subscribe((credentials)=>{
+     this.clientId = credentials.clientId
+    });
   }
 
   ngAfterViewChecked(): void {
@@ -92,9 +91,8 @@ export class WhiteboardWrapperComponent {
   }
 
   private getBoardsPickerConfiguration(boardContainer?:ElementRef<HTMLElement>):MiroBoardPickerConfig{
-    console.log(process?.env)
    const config:MiroBoardPickerConfig =  {
-      clientId: process?.env?.['client_id']  ,
+      clientId: this.clientId,
       action: 'access-link',
       allowCreateAnonymousBoards: false,
       success: this.boardSelectionSuccess,

@@ -22,7 +22,7 @@
   @if(microBoardUrl){
     <router-outlet/>
   }
-  @else if(clientId$ | async) {
+  @else if(clientId) {
     <div #boardContainer class="no-board">
     </div>  
   }
