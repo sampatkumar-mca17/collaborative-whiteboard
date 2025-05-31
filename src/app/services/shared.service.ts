@@ -50,6 +50,7 @@ export class SharedService {
       data:null,
       fetchingComplete:false
     }
+    this.setMicroBoardStatus(this.miroBoardStatusChecker);
   }
   private getBoardsPickerConfiguration(boardContainer?:ElementRef<HTMLElement>):MiroBoardPickerConfig{
     this.miroBoardStatusChecker.fetching = true;
